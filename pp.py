@@ -1,37 +1,35 @@
-from datetime import datetime, timedelta
+def create_substitution_dict(table):
+    # Membuat kamus substitusi dari tabel 5x2
+    substitution_dict = {}
+    for i in range(len(table[0])):
+        substitution_dict[table[0][i]] = table[1][i]
+    return substitution_dict
 
-def tanggal_sebelumnya(tanggal_str, bulan_str, tahun_str):
-    try:
-        # Mengonversi input menjadi integer
-        tanggal = int(tanggal_str)
-        bulan = int(bulan_str)
-        tahun = int(tahun_str)
+def substitute_message(message, substitution_dict):
+    # Substitusi pesan menggunakan kamus substitusi
+    encrypted_message = ""
+    for char in message:
+        if char in substitution_dict:
+            encrypted_message += substitution_dict[char]
+        else:
+            encrypted_message += char  # Jika karakter tidak ada dalam tabel, biarkan apa adanya
+    return encrypted_message
 
-        # Membuat objek tanggal
-        tgl = datetime(tahun, bulan, tanggal)
+# Input tabel 5x2
+table = [
+    ['A', 'B', 'C', 'E', 'F'],  # Baris 1 (Huruf asli)
+    ['J', 'X', 'D', 'I', 'K']   # Baris 2 (Huruf pengganti)
+]
 
-        # Menghitung tanggal sebelumnya
-        tgl_sebelumnya = tgl - timedelta(days=1)
+# Membuat kamus substitusi dari tabel
+substitution_dict = create_substitution_dict(table)
 
-        # Mengambil hari, bulan, dan tahun dari tanggal sebelumnya
-        hari_sebelumnya = tgl_sebelumnya.day
-        bulan_sebelumnya = tgl_sebelumnya.month
-        tahun_sebelumnya = tgl_sebelumnya.year
+# Pesan input yang akan dienkripsi
+message = "SELAMAT PAGI TEMAN-TEMAN"
 
-        return hari_sebelumnya, bulan_sebelumnya, tahun_sebelumnya
-    except ValueError as e:
-        return str(e)
+# Proses substitusi (enkripsi)
+encrypted_message = substitute_message(message, substitution_dict)
 
-# Input dari pengguna
-tanggal_str = input("Masukkan hari (1-31): ")
-bulan_str = input("Masukkan bulan (1-12): ")
-tahun_str = input("Masukkan tahun (misal: 2024): ")
-
-# Mendapatkan tanggal sebelumnya
-hari_sebelumnya, bulan_sebelumnya, tahun_sebelumnya = tanggal_sebelumnya(tanggal_str, bulan_str, tahun_str)
-
-# Menampilkan hasil
-if isinstance(hari_sebelumnya, int):  # Memeriksa apakah hasilnya adalah tanggal yang valid
-    print(f"Tanggal satu hari sebelum {tanggal_str}/{bulan_str}/{tahun_str} adalah {hari_sebelumnya}/{bulan_sebelumnya}/{tahun_sebelumnya}.")
-else:
-    print(f"Kesalahan: {hari_sebelumnya}")
+# Output hasil
+print("Pesan asli:", message)
+print("Pesan terenkripsi:", encrypted_message)
